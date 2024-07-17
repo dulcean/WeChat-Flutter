@@ -1,6 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:we_chat/presentation/components/selector.dart';
 import 'package:we_chat/presentation/components/text_box.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -13,6 +17,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final usersCollection = FirebaseFirestore.instance.collection("Users");
+  Uint8List? _image;
 
   Future<void> editField(String field) async {
     String newData = "";
@@ -31,15 +36,25 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          TextButton(onPressed: () => Navigator.of(context).pop(newData), child: const Text('Save')),
-
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel')),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(newData),
+              child: const Text('Save')),
         ],
       ),
     );
     if (newData.trim().isNotEmpty) {
       await usersCollection.doc(currentUser.email).update({field: newData});
     }
+  }
+
+  void selectImg() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
   }
 
   @override
@@ -77,9 +92,32 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(
                     height: 50,
                   ),
-                  const Icon(
-                    Icons.person,
-                    size: 72,
+                  // const Icon(
+                  //   Icons.person,
+                  //   size: 72,
+                  // ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 64,
+                              backgroundImage: MemoryImage(_image!),
+                            )
+                          : const CircleAvatar(
+                              radius: 64,
+                              backgroundImage: NetworkImage(
+                                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYK8aNyMiO8wxayYoFaPN5xKMINdBjL8VWJw&s"),
+                            ),
+                      Positioned(
+                        bottom: -10,
+                        left: 225,
+                        child: IconButton(
+                          onPressed: selectImg,
+                          icon: const Icon(Icons.add_a_photo_rounded),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 10,

@@ -48,7 +48,7 @@ class _RegisterPageState extends State<RegisterPage> {
             'bio': 'Empty bio...',
           });
 
-      if (context.mounted) Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       displayMessage(e.code);
