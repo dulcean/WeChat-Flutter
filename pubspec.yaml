@@ -12,6 +12,7 @@ dependencies:
   firebase_core: ^2.27.0
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.6
   image_picker: ^1.0.8
 
 dev_dependencies:
