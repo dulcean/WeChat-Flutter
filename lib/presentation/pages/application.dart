@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:we_chat/internal/auth/auth.dart';
+
+import '../../internal/auth/auth.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key});

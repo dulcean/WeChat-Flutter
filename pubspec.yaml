@@ -1,5 +1,5 @@
-name: we_chat
-description: "A new Flutter project."
+name: WeChat
+description: "Telegram killer"
 publish_to: 'none'
 version: 0.1.0
 
@@ -7,13 +7,19 @@ environment:
   sdk: '>=3.2.6 <4.0.0'
 
 dependencies:
+  bloc: ^8.1.4
   cloud_firestore: ^4.15.8
+  equatable: ^2.0.5
+  file_picker: ^8.0.0+1
   firebase_auth: ^4.17.8
   firebase_core: ^2.27.0
+  firebase_storage: ^11.6.9
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.6
   image_picker: ^1.0.8
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
