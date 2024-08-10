@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:we_chat/presentation/components/drawer.dart';
-import 'package:we_chat/presentation/components/text_field.dart';
-import 'package:we_chat/presentation/components/wall_posts.dart';
-import 'package:we_chat/presentation/pages/profile.dart';
+
+import '../components/drawer.dart';
+import '../components/text_field.dart';
+import '../components/wall_posts.dart';
+import 'profile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

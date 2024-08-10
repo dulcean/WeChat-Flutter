@@ -4,8 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:we_chat/presentation/components/selector.dart';
-import 'package:we_chat/presentation/components/text_box.dart';
+
+import '../components/selector.dart';
+import '../components/text_box.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

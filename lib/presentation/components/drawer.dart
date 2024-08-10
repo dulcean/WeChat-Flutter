@@ -1,5 +1,6 @@
+import 'package:WeChat/presentation/components/list_tile.dart';
 import 'package:flutter/material.dart';
-import 'package:we_chat/presentation/components/list_tile.dart';
+
 
 class DrawerComponent extends StatelessWidget {
   final void Function()? onProfileTap;

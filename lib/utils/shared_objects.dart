@@ -1,7 +1,7 @@
-import 'shared_prefs.dart';
+// import 'shared_prefs.dart';
 
-class SharedObjects {
-  static CachedSharedPreferences? sharedPreferences;
+// class SharedObjects {
+//   static CachedSharedPreferences? sharedPreferences;
 
 
-}
+// }
