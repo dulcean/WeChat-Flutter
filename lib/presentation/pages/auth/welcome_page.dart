@@ -12,44 +12,56 @@ class WelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Expanded(
-            child: Center(
-              child: Lottie.asset(
-                'assets/lottie/bow.json',
-                width: 300,
-                height: 300,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              AppTheme.lightTheme.scaffoldBackgroundColor,
+              const Color.fromARGB(255, 80, 176, 255),
+            ],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Center(
+                child: Lottie.asset(
+                  'assets/lottie/bow.json',
+                  width: 300,
+                  height: 300,
+                ),
               ),
             ),
-          ),
-          const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 80),
-              child: Text(
-                'Welcome to WeChat,\nthe greatest app to chat \never',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w400,
-                ),
-              )),
-          const SizedBox(
-            height: 40,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 17),
-            child: UpdateButton(
-              onTap: () {
-                GoRouter.of(context).pushNamed(RouterConstants.login);
-              },
-              text: 'Next',
+            const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 80),
+                child: Text(
+                  'Welcome to WeChat,\nthe greatest app to chat \never',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w400,
+                  ),
+                )),
+            const SizedBox(
+              height: 40,
             ),
-          ),
-          const SizedBox(
-            height: 100,
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 17),
+              child: UpdateButton(
+                onTap: () {
+                  GoRouter.of(context).pushNamed(RouterConstants.register);
+                },
+                text: 'Next',
+              ),
+            ),
+            const SizedBox(
+              height: 100,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,11 +1,11 @@
 import 'package:WeChat/configs/app_theme.dart';
+import 'package:WeChat/configs/router_constants.dart';
 import 'package:WeChat/gen/assets.gen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../internal/auth/auth.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 5000), () {
-      GoRouter.of(context).go('/welcome');
+      GoRouter.of(context).go(RouterConstants.authenticationPath);
     });
   }
 
@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
             height: 400,
           ),
           backgroundColor: Colors.transparent,
-          nextScreen: const AuthPage(),
+          nextScreen: Container(),
           duration: 5000,
         ),
       ],

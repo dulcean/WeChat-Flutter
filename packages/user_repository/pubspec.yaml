@@ -1,5 +1,5 @@
-name: WeChat
-description: "Telegram killer"
+name: user_repository
+description: "user_repository"
 publish_to: "none"
 version: 0.1.0
 
@@ -26,9 +26,6 @@ dependencies:
   go_router: ^14.2.3
   animations: ^2.0.11
   page_transition: ^2.1.0
-  firebase_storage_web:
-  user_repository:
-    path: packages/user_repository
 
 dev_dependencies:
   flutter_test:
@@ -38,28 +35,8 @@ dev_dependencies:
   build_runner: ^2.1.10
   json_serializable: ^6.6.1
   flutter_gen_runner:
-  flutter_svg:
 
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/images/splash/
-    - assets/images/icons/
-    - assets/images/help/
-    - assets/vectors/navigator_icons/
-    - assets/lottie/
 
-  fonts:
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Bold.otf
-          weight: 700
-        - asset: assets/fonts/Inter-ExtraBold.otf
-          weight: 900
-        - asset: assets/fonts/Inter-Medium.otf
-          weight: 500
-        - asset: assets/fonts/Inter-Regular.otf
-          weight: 300
-        - asset: assets/fonts/Inter-Thin.otf
-          weight: 100

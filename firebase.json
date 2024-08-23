@@ -1,1 +1,22 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"wechat-4736d","appId":"1:1029609314082:android:795d57a3d35e53b220b77b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"wechat-4736d","configurations":{"android":"1:1029609314082:android:795d57a3d35e53b220b77b","ios":"1:1029609314082:ios:d354ccf641343beb20b77b"}}}}}}
+{
+    "flutter": {
+        "platforms": {
+            "android": {
+                "default": {
+                    "projectId": "wechat-4736d",
+                    "appId": "1:1029609314082:android:795d57a3d35e53b220b77b",
+                    "fileOutput": "android/app/google-services.json"
+                }
+            },
+            "dart": {
+                "lib/firebase_options.dart": {
+                    "projectId": "wechat-4736d",
+                    "configurations": {
+                        "android": "1:1029609314082:android:795d57a3d35e53b220b77b",
+                        "ios": "1:1029609314082:ios:d354ccf641343beb20b77b"
+                    }
+                }
+            }
+        }
+    }
+}

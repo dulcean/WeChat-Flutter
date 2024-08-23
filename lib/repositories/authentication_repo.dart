@@ -1,17 +1,24 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-// import '../providers/authentication_provider.dart';
-// import '../providers/base_providers.dart';
-
-// class AuthenticationRepository {
-//   BaseAuthenticationProvider authenticationProvider = AuthenticationProvider();
-
-//   Future<User?> signIn(String email, String password) =>
-//       authenticationProvider.signIn(email, password);
-
-//   Future<void> signOut() => authenticationProvider.signOut();
-
-//   Future<User?> getCurrentUser() => authenticationProvider.getCurrentUser();
-
-//   Future<bool> isLoggedIn() => authenticationProvider.isLoggedIn();
-// }
+class AuthenticationRepository {
+  // final _firebaseAuth = FirebaseAuth.instance;
+  Future<void> signUp({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        throw Exception('This password is too weak');
+      } else if (e.code == 'email-already-in-use') {
+        throw Exception('This email is already used');
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+}

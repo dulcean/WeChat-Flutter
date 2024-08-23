@@ -25,11 +25,28 @@ class $AssetsImagesGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/bow.json
+  String get bow => 'assets/lottie/bow.json';
+
+  /// File path: assets/lottie/loading.json
+  String get loading => 'assets/lottie/loading.json';
+
   /// File path: assets/lottie/logo_animation.json
   String get logoAnimation => 'assets/lottie/logo_animation.json';
 
+  /// File path: assets/lottie/sphere.json
+  String get sphere => 'assets/lottie/sphere.json';
+
   /// List of all assets
-  List<String> get values => [logoAnimation];
+  List<String> get values => [bow, loading, logoAnimation, sphere];
+}
+
+class $AssetsVectorsGen {
+  const $AssetsVectorsGen();
+
+  /// Directory path: assets/vectors/navigator_icons
+  $AssetsVectorsNavigatorIconsGen get navigatorIcons =>
+      const $AssetsVectorsNavigatorIconsGen();
 }
 
 class $AssetsImagesHelpGen {
@@ -50,8 +67,20 @@ class $AssetsImagesIconsGen {
   AssetGenImage get arrowIcon =>
       const AssetGenImage('assets/images/icons/arrow_icon.png');
 
+  /// File path: assets/images/icons/ellipse.png
+  AssetGenImage get ellipse =>
+      const AssetGenImage('assets/images/icons/ellipse.png');
+
+  /// File path: assets/images/icons/search_icon.png
+  AssetGenImage get searchIcon =>
+      const AssetGenImage('assets/images/icons/search_icon.png');
+
+  /// File path: assets/images/icons/w_icon.png
+  AssetGenImage get wIcon =>
+      const AssetGenImage('assets/images/icons/w_icon.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [arrowIcon];
+  List<AssetGenImage> get values => [arrowIcon, ellipse, searchIcon, wIcon];
 }
 
 class $AssetsImagesSplashGen {
@@ -69,11 +98,28 @@ class $AssetsImagesSplashGen {
   List<AssetGenImage> get values => [background, iconChat];
 }
 
+class $AssetsVectorsNavigatorIconsGen {
+  const $AssetsVectorsNavigatorIconsGen();
+
+  /// File path: assets/vectors/navigator_icons/chats.svg
+  String get chats => 'assets/vectors/navigator_icons/chats.svg';
+
+  /// File path: assets/vectors/navigator_icons/friends.svg
+  String get friends => 'assets/vectors/navigator_icons/friends.svg';
+
+  /// File path: assets/vectors/navigator_icons/settings.svg
+  String get settings => 'assets/vectors/navigator_icons/settings.svg';
+
+  /// List of all assets
+  List<String> get values => [chats, friends, settings];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsVectorsGen vectors = $AssetsVectorsGen();
 }
 
 class AssetGenImage {
