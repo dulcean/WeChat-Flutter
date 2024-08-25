@@ -13,6 +13,7 @@ import 'package:user_repository/user_repository.dart';
 
 import '../blocs/auth/login/login_bloc.dart';
 import '../blocs/auth/register/register_bloc.dart';
+import '../presentation/pages/features/requests_page.dart';
 import '../presentation/pages/splash/splash_screen.dart';
 
 class RouterPaths {
@@ -143,6 +144,27 @@ class RouterPaths {
           );
         },
       ),
+      GoRoute(
+        name: 'bottom_modal',
+        path: '/bottom_modal',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: BottomModalScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset(0.0, 0.0);
+            const curve = Curves.easeInOut;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+      )
     ],
   );
 }

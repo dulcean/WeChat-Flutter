@@ -67,6 +67,10 @@ class $AssetsImagesIconsGen {
   AssetGenImage get arrowIcon =>
       const AssetGenImage('assets/images/icons/arrow_icon.png');
 
+  /// File path: assets/images/icons/asset.jpg
+  AssetGenImage get asset =>
+      const AssetGenImage('assets/images/icons/asset.jpg');
+
   /// File path: assets/images/icons/ellipse.png
   AssetGenImage get ellipse =>
       const AssetGenImage('assets/images/icons/ellipse.png');
@@ -80,7 +84,8 @@ class $AssetsImagesIconsGen {
       const AssetGenImage('assets/images/icons/w_icon.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [arrowIcon, ellipse, searchIcon, wIcon];
+  List<AssetGenImage> get values =>
+      [arrowIcon, asset, ellipse, searchIcon, wIcon];
 }
 
 class $AssetsImagesSplashGen {
