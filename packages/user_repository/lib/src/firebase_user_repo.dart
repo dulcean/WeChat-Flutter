@@ -71,4 +71,25 @@ class FirebaseUserRepository implements UserRepository {
       }
     });
   }
+
+  @override
+  Future<WeUser?> getUserById(String userId) async {
+    try {
+      final userDocument = await userCollection.doc(userId).get();
+      if (userDocument.exists) {
+        final userEntity = WeUserEntity.fromDocument(userDocument.data()!);
+        return WeUser.fromEntity(userEntity);
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+    return null;
+  }
+
+  @override
+  String? getCurrentId() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid;
+  }
 }

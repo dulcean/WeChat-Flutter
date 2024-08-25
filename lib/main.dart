@@ -22,8 +22,10 @@ void main() async {
 
   final userRepository = FirebaseUserRepository();
   final userProfileRepository = FirebaseUserProfileRepository();
+  final userFriendsRepository = FirebaseUserFriendsRepository();
   runApp(Application(
     userRepository: userRepository,
     userProfileRepository: userProfileRepository,
+    userFriendsRepository: userFriendsRepository,
   ));
 }

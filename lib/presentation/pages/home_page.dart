@@ -95,16 +95,24 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         final post = snapshot.data!.docs[index];
                         final userEmail = post['UserEmail'];
-                        return FutureBuilder<DocumentSnapshot>(future: FirebaseFirestore.instance.collection('Users').doc(userEmail).get(),
-                         builder: (context, userSnapshot) {
-                          if(userSnapshot.hasData) {
-                            final username = userSnapshot.data!['username'];
-                            return WallPost(postMessage: post['Message'], user: username, likes: List<String>.from(post['Likes'] ?? []), postID: post.id);
-                          } else if (userSnapshot.hasError) {
-                            return Text('Error: ${userSnapshot.error}');
-                          }
-                          return const CircularProgressIndicator();
-                         },
+                        return FutureBuilder<DocumentSnapshot>(
+                          future: FirebaseFirestore.instance
+                              .collection('Users')
+                              .doc(userEmail)
+                              .get(),
+                          builder: (context, userSnapshot) {
+                            if (userSnapshot.hasData) {
+                              final username = userSnapshot.data!['username'];
+                              return WallPost(
+                                  postMessage: post['Message'],
+                                  user: username,
+                                  likes: List<String>.from(post['Likes'] ?? []),
+                                  postID: post.id);
+                            } else if (userSnapshot.hasError) {
+                              return Text('Error: ${userSnapshot.error}');
+                            }
+                            return const CircularProgressIndicator();
+                          },
                         );
                         // return WallPost(
                         //   postMessage: post['Message'],

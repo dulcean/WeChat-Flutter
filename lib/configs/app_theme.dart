@@ -6,6 +6,7 @@ class AppTheme {
     brightness: Brightness.light,
     fontFamily: 'Inter',
     primaryColor: AppColors.primaryColor,
+    cardColor: AppColors.secondaryColor,
     scaffoldBackgroundColor: AppColors.lightBackground,
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

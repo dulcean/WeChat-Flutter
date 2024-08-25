@@ -1,10 +1,10 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:user_repository/src/entities/we_user_friends_entity.dart';
-import 'package:user_repository/src/user_friends_repo.dart';
+import 'package:user_repository/user_repository.dart';
 
 class FirebaseUserFriendsRepository implements UserFriendsRepository {
+  final userRepo = FirebaseUserRepository();
   final _usersCollection = FirebaseFirestore.instance.collection('users');
   final _userProfilesCollection =
       FirebaseFirestore.instance.collection('user_profiles');
@@ -113,7 +113,7 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
       final userIds = <String>{};
 
       for (var doc in nameResults.docs) {
-        userIds.add(doc.id);
+        if (doc.id != userRepo.getCurrentId()) userIds.add(doc.id);
       }
 
       for (var doc in weTagResults.docs) {

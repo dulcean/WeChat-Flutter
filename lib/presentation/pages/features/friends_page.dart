@@ -1,11 +1,16 @@
 import 'package:WeChat/blocs/friends/friend_requests/friend_requests_bloc.dart';
 import 'package:WeChat/configs/app_theme.dart';
+import 'package:WeChat/configs/router_constants.dart';
+import 'package:WeChat/gen/assets.gen.dart';
 import 'package:WeChat/presentation/components/text_editing/search_field.dart';
+import 'package:animation_list/animation_list.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../components/friend_page/friend_tile.dart';
 import 'requests_page.dart';
 
 class FriendsPage extends StatefulWidget {
@@ -18,6 +23,20 @@ class FriendsPage extends StatefulWidget {
 class _FriendsPageState extends State<FriendsPage> {
   final searchController = TextEditingController();
   final cardSwiperController = CardSwiperController();
+  final List<Map<String, dynamic>> data = [
+    {
+      'title': '1111',
+      'backgroundColor': AppTheme.lightTheme.cardColor,
+    },
+    {
+      'title': '1111',
+      'backgroundColor': AppTheme.lightTheme.cardColor,
+    },
+    {
+      'title': '1111',
+      'backgroundColor': AppTheme.lightTheme.cardColor,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -115,20 +134,22 @@ class _FriendsPageState extends State<FriendsPage> {
                               value: MenuItems.addFriend,
                               child: MenuItems.buildItem(MenuItems.addFriend),
                             ),
-                            const DropdownMenuItem<Divider>(
-                                enabled: false, child: Divider()),
+                            // const DropdownMenuItem<Divider>(
+                            //     enabled: false, child: Divider()),
                             DropdownMenuItem<MenuItem>(
                               value: MenuItems.removeFriend,
                               child:
                                   MenuItems.buildItem(MenuItems.removeFriend),
                             ),
                           ],
-                          onChanged: (Object) {},
+                          onChanged: (val) {
+                            onChanged(context, val!);
+                          },
                           dropdownStyleData: DropdownStyleData(
                             width: 160,
                             padding: const EdgeInsets.symmetric(vertical: 6),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.circular(20),
                               color: Colors.white,
                             ),
                             offset: const Offset(0, 8),
@@ -141,9 +162,35 @@ class _FriendsPageState extends State<FriendsPage> {
               ],
             ),
           ),
+          const SizedBox(
+            height: 15,
+          ),
+          Expanded(
+            child: AnimationList(
+              reBounceDepth: 10,
+              duration: 100,
+              children: data.map((item) {
+                return FriendTile(
+                    title: 'GOIDA ZOV',
+                    subtitle: 'LAVRIK_10000',
+                    avatarUrl: Assets.images.icons.asset.path,
+                    backgroundColor: item['backgroundColor']);
+              }).toList(),
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  static void onChanged(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.addFriend:
+        GoRouter.of(context).pushNamed(RouterConstants.search);
+        break;
+      case MenuItems.removeFriend:
+        break;
+    }
   }
 }
 

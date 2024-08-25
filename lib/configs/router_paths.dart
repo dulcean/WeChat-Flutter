@@ -6,6 +6,7 @@ import 'package:WeChat/presentation/pages/auth/login_page.dart';
 import 'package:WeChat/presentation/pages/auth/profile_fill.dart';
 import 'package:WeChat/presentation/pages/auth/register_page.dart';
 import 'package:WeChat/presentation/pages/auth/welcome_page.dart';
+import 'package:WeChat/presentation/pages/features/search_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -149,6 +150,27 @@ class RouterPaths {
         path: '/bottom_modal',
         pageBuilder: (context, state) => CustomTransitionPage(
           child: BottomModalScreen(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset(0.0, 0.0);
+            const curve = Curves.easeInOut;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        ),
+      ),
+      GoRoute(
+        name: 'search',
+        path: '/search',
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: const SearchFriend(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             const begin = Offset(0.0, 1.0);
             const end = Offset(0.0, 0.0);

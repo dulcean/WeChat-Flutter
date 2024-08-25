@@ -18,4 +18,6 @@ abstract interface class UserRepository {
   );
 
   Future<void> logOut();
+  Future<WeUser?> getUserById(String userId);
+  String? getCurrentId();
 }

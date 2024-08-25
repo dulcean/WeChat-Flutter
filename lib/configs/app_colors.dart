@@ -4,4 +4,5 @@ class AppColors {
   static const primaryColor = Color(0xff36B8B8);
   static const lightBackground = Color(0xffE9FEFE);
   static const unchoosedColor = Color.fromARGB(124, 78, 78, 78);
+  static const secondaryColor = Color(0xffB5E2E2);
 }

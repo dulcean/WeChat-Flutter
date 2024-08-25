@@ -6,15 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_repository/user_repository.dart';
 
+import '../../blocs/friends/find_friend/find_friend_bloc.dart';
+
 class Application extends StatelessWidget {
   const Application({
     required this.userRepository,
     required this.userProfileRepository,
+    required this.userFriendsRepository,
     super.key,
   });
 
   final UserRepository userRepository;
   final UserProfileRepository userProfileRepository;
+  final UserFriendsRepository userFriendsRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +29,9 @@ class Application extends StatelessWidget {
         ),
         RepositoryProvider<UserProfileRepository>(
           create: (context) => userProfileRepository,
+        ),
+        RepositoryProvider<UserFriendsRepository>(
+          create: (context) => userFriendsRepository,
         ),
       ],
       child: MultiBlocProvider(
@@ -37,6 +44,15 @@ class Application extends StatelessWidget {
           BlocProvider(
             create: (context) => ProfileFillBloc(
               userProfileRepository: userProfileRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (context) => FindFriendBloc(
+              userRepository: RepositoryProvider.of<UserRepository>(context),
+              userProfileRepository:
+                  RepositoryProvider.of<UserProfileRepository>(context),
+              userFriendsRepository:
+                  RepositoryProvider.of<UserFriendsRepository>(context),
             ),
           ),
         ],
