@@ -10,15 +10,25 @@ sealed class FriendRequestsState extends Equatable {
 final class FriendRequestsInitial extends FriendRequestsState {}
 
 final class CardSwipedState extends FriendRequestsState {
-  const CardSwipedState();
+  const CardSwipedState(this.userId);
+  final String userId;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [userId];
 }
 
 final class CardSwipedRightState extends FriendRequestsState {
-  const CardSwipedRightState();
+  const CardSwipedRightState(this.userId);
+  final String userId;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [userId];
 }
 
 final class ModalCloseState extends FriendRequestsState {}
+
+class FriendRequestsLoaded extends FriendRequestsState {
+  final List<Friend> pendingRequestUserIds;
+
+  const FriendRequestsLoaded(this.pendingRequestUserIds);
+}
+
+class FriendRequestsLoading extends FriendRequestsState {}

@@ -16,17 +16,33 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
       FirebaseFirestore.instance.collection('friendship_reject');
 
   @override
-  Future<void> acceptFriendRequest(String userId, String friendId) async {
+  Future<void> acceptFriendRequest(String friendId) async {
     try {
+      final userId = userRepo.getCurrentId();
       final friendsRequestDoc =
           await _friendRequests.doc('${userId}_$friendId').get();
+
       if (friendsRequestDoc.exists) {
-        await _friendsCollection.doc(userId).update({
-          'friends': FieldValue.arrayUnion([friendId])
-        });
-        await _friendsCollection.doc(friendId).update({
-          'friends': FieldValue.arrayUnion([userId]),
-        });
+        final userFriendsDoc = await _friendsCollection.doc(userId).get();
+        if (userFriendsDoc.exists) {
+          await _friendsCollection.doc(userId).update({
+            'friends': FieldValue.arrayUnion([friendId])
+          });
+        } else {
+          await _friendsCollection.doc(userId).set({
+            'friends': [friendId]
+          });
+        }
+        final friendDoc = await _friendsCollection.doc(friendId).get();
+        if (friendDoc.exists) {
+          await _friendsCollection.doc(friendId).update({
+            'friends': FieldValue.arrayUnion([userId]),
+          });
+        } else {
+          await _friendsCollection.doc(friendId).set({
+            'friends': [userId]
+          });
+        }
         await _friendRequests.doc('${userId}_$friendId').delete();
         await _friendRequests.doc('${friendId}_$userId').delete();
       }
@@ -57,8 +73,9 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   }
 
   @override
-  Future<void> rejectFriendRequest(String userId, String friendId) async {
+  Future<void> rejectFriendRequest(String friendId) async {
     try {
+      final userId = userRepo.getCurrentId();
       final friendRequestDoc =
           await _friendRequests.doc('${userId}_$friendId').get();
       if (friendRequestDoc.exists) {
@@ -128,8 +145,9 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   }
 
   @override
-  Future<void> sendFriendRequest(String userId, String friendId) async {
+  Future<void> sendFriendRequest(String friendId) async {
     try {
+      String? userId = userRepo.getCurrentId();
       final existingRequest = await _friendRequests
           .where('userId', isEqualTo: userId)
           .where('friendId', isEqualTo: friendId)
@@ -163,6 +181,20 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
     } catch (e) {
       log(e.toString());
       rethrow;
+    }
+  }
+
+  @override
+  Future<List<String>> getPendingFriendRequestUserIds(
+      String currentUserId) async {
+    try {
+      final querySnapshot = await _friendRequests.get();
+
+      return querySnapshot.docs.map((doc) {
+        return doc['friendId'] as String;
+      }).toList();
+    } catch (e) {
+      throw Exception('Error fetching friend requests: $e');
     }
   }
 }

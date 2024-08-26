@@ -24,7 +24,7 @@ class FriendCard extends StatelessWidget {
             borderRadius: const BorderRadius.vertical(
               top: Radius.circular(25),
             ),
-            child: Image.asset(
+            child: Image.network(
               imgPath,
               fit: BoxFit.cover,
               height: MediaQuery.of(context).size.height * 0.4,

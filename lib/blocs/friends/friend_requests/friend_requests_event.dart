@@ -9,8 +9,18 @@ sealed class FriendRequestsEvent extends Equatable {
 
 class InitializeEvent extends FriendRequestsEvent {}
 
-class SwipeLeftEvent extends FriendRequestsEvent {}
+class SwipeLeftEvent extends FriendRequestsEvent {
+  final String userId;
 
-class SwipeRightEvent extends FriendRequestsEvent {}
+  const SwipeLeftEvent(this.userId);
+}
+
+class SwipeRightEvent extends FriendRequestsEvent {
+  final String userId;
+
+  const SwipeRightEvent(this.userId);
+}
 
 class CloseModalEvent extends FriendRequestsEvent {}
+
+class LoadFriendRequestsEvent extends FriendRequestsEvent {}

@@ -118,4 +118,22 @@ class FirebaseUserProfileRepository implements UserProfileRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<String?> getUserIdByWeTag(String weTag) async {
+    try {
+      final querySnapshot = await _profileCollection
+          .where('weTag', isEqualTo: weTag)
+          .limit(1)
+          .get();
+      if (querySnapshot.docs.isNotEmpty) {
+        return querySnapshot.docs.first.id;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      log(e.toString());
+      rethrow;
+    }
+  }
 }

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:go_router/go_router.dart';
+import 'package:user_repository/user_repository.dart';
 
 import '../../components/friend_page/friend_tile.dart';
 import 'requests_page.dart';
@@ -98,7 +99,14 @@ class _FriendsPageState extends State<FriendsPage> {
 
                               return BlocProvider(
                                 create: (context) => FriendRequestsBloc(
-                                    cardSwiperController: cardSwiperController),
+                                    cardSwiperController: cardSwiperController,
+                                    userFriendsRepository: RepositoryProvider
+                                        .of<UserFriendsRepository>(context),
+                                    userRepository:
+                                        RepositoryProvider.of<UserRepository>(
+                                            context),
+                                    userProfileRepository: RepositoryProvider
+                                        .of<UserProfileRepository>(context)),
                                 child: BottomModalScreen(),
                               );
                             },

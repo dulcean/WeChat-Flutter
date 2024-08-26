@@ -17,4 +17,6 @@ abstract class UserProfileRepository {
   Future<bool> doesUserProfileExist(String userId);
 
   Stream<WeUserProfileEntity?> getUserProfileStream(String userId);
+
+  Future<String?> getUserIdByWeTag(String weTag);
 }
