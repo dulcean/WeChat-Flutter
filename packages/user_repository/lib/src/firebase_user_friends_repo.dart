@@ -148,6 +148,15 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   Future<void> sendFriendRequest(String friendId) async {
     try {
       String? userId = userRepo.getCurrentId();
+      final friendsDoc = await _friendsCollection.doc(userId).get();
+      if (friendsDoc.exists) {
+        final friends = (friendsDoc.data() as Map<String, dynamic>)['friends']
+            as List<dynamic>;
+        if (friends.contains(friendId)) {
+          log('You are already friends with this user.');
+          return;
+        }
+      }
       final existingRequest = await _friendRequests
           .where('userId', isEqualTo: userId)
           .where('friendId', isEqualTo: friendId)

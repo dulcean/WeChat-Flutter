@@ -37,6 +37,7 @@ class _ProfileFillPageState extends State<ProfileFillPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Profile updated successfully')),
             );
+            GoRouter.of(context).go('/home');
           } else if (state is ProfileFillFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Profile update failed')),

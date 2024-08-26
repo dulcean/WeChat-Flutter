@@ -18,24 +18,30 @@ class AuthenticationLogic extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) async {
-        final userId = state.user!.userId;
-        if (state.status == AuthenticationStatus.authenticated) {
-          final userProfileRepository = FirebaseUserProfileRepository();
-          final isComplete = await userProfileRepository.isProfileComplete(userId);
-          try {
-            if (isComplete) {
-              log('Navigating to HomePage');
-              context.go(RouterConstants.homePath);
+        try {
+          if (state.status == AuthenticationStatus.authenticated) {
+            final userId = state.user?.userId;
+            if (userId != null) {
+              final userProfileRepository = RepositoryProvider.of<UserProfileRepository>(context);
+              final isComplete =
+                  await userProfileRepository.isProfileComplete(userId);
+
+              if (isComplete) {
+                log('Navigating to HomePage');
+                context.go(RouterConstants.homePath);
+              } else {
+                log('Navigating to EditingPage');
+                context.go(RouterConstants.profileFillPath, extra: userId);
+              }
             } else {
-              log('Navigating to EditingPage');
-              context.go(RouterConstants.profileFillPath, extra: userId);
+              log('Error: User ID is null or user is not authenticated.');
             }
-          } on Exception catch (e) {
-            log('Error checking profile: ${e.toString()}');
+          } else if (state.status == AuthenticationStatus.unauthenticated) {
+            log('Navigating to WelcomePage');
+            context.go(RouterConstants.welcomePath);
           }
-        } else if (state.status == AuthenticationStatus.unauthenticated) {
-          log('Navigating to WelcomePage');
-          context.go(RouterConstants.welcomePath);
+        } catch (e) {
+          log('Error in AuthenticationLogic listener: $e');
         }
       },
       child: const Scaffold(

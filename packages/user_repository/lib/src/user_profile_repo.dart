@@ -19,4 +19,6 @@ abstract class UserProfileRepository {
   Stream<WeUserProfileEntity?> getUserProfileStream(String userId);
 
   Future<String?> getUserIdByWeTag(String weTag);
+
+  Future<bool> isProfileComplete(String userId);
 }

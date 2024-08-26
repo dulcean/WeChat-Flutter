@@ -83,21 +83,27 @@ class FirebaseUserProfileRepository implements UserProfileRepository {
     });
   }
 
+  @override
   Future<bool> isProfileComplete(String userId) async {
     try {
       final docSnapshot = await _profileCollection.doc(userId).get();
       if (docSnapshot.exists) {
         final data = docSnapshot.data() as Map<String, dynamic>;
+        log('Profile data: $data');
         final photoUrl = data['photoUrl'];
         final weTag = data['weTag'];
-        return photoUrl != null &&
+        final isComplete = photoUrl != null &&
             photoUrl.isNotEmpty &&
             weTag != null &&
             weTag.isNotEmpty;
+        log('Profile complete: $isComplete');
+        return isComplete;
+      } else {
+        log('No profile found for user ID: $userId');
+        return false;
       }
-      return false;
     } catch (e) {
-      log(e.toString());
+      log('Error in isProfileComplete: ${e.toString()}');
       rethrow;
     }
   }

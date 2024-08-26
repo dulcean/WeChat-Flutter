@@ -1,6 +1,8 @@
 import 'package:WeChat/configs/app_theme.dart';
 import 'package:WeChat/presentation/components/text_editing/search_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_repository/user_repository.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,7 +39,12 @@ class _HomePageState extends State<HomePage> {
                     hintText: 'Type W-Tag of user...',
                     onTap: () {},
                   ),
-                )
+                ),
+                InkWell(
+                  onTap: () =>
+                      RepositoryProvider.of<UserRepository>(context).logOut(),
+                  child: const Icon(Icons.abc),
+                ),
                 // const SizedBox(
                 //     height: 20),
                 // const TabBar(

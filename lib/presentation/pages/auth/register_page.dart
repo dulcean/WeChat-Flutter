@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
           setState(() {
             registerRequired = false;
           });
-          GoRouter.of(context).pushReplacementNamed(RouterConstants.home);
+          GoRouter.of(context).go('/auth');
         } else if (state is RegisterProcess) {
           setState(() {
             registerRequired = true;

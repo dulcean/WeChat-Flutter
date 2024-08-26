@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
         if(state is LoginSuccess) {
           setState(() {
             loginRequired = false;
-            GoRouter.of(context).pushReplacementNamed(RouterConstants.home);
+            GoRouter.of(context).go('/auth');
           });
         } else if (state is LoginProcess) {
           setState(() {

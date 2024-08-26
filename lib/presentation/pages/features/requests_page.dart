@@ -6,6 +6,7 @@ import 'package:WeChat/models/friend.dart';
 import 'package:WeChat/presentation/components/main_elements/friend_card.dart';
 import 'package:WeChat/presentation/components/movement/circular.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 
@@ -23,6 +24,7 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
     super.initState();
     context.read<FriendRequestsBloc>().add(LoadFriendRequestsEvent());
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<FriendRequestsBloc, FriendRequestsState>(
@@ -69,28 +71,49 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
                 return Column(
                   children: [
                     Flexible(
-                      child: CardSwiper(
-                        cardBuilder: (
-                          context,
-                          index,
-                          horizontalThresholdPercentage,
-                          verticalThresholdPercentage,
-                        ) {
-                          currentIndex = index;
-                          return imageList[index];
-                        },
-                            
-                        cardsCount: imageList.length,
-                        numberOfCardsDisplayed:
-                            imageList.length < 3 ? imageList.length : 3,
-                        controller: controller,
-                        allowedSwipeDirection:
-                            const AllowedSwipeDirection.symmetric(
-                                horizontal: true),
-                        scale: 0.9,
-                        threshold: 90,
-                        onSwipe: _onSwipe,
-                      ),
+                      child: imageList.isNotEmpty
+                          ? CardSwiper(
+                              cardBuilder: (
+                                context,
+                                index,
+                                horizontalThresholdPercentage,
+                                verticalThresholdPercentage,
+                              ) {
+                                currentIndex = index;
+                                return imageList[index];
+                              },
+                              cardsCount: imageList.length,
+                              numberOfCardsDisplayed:
+                                  imageList.length < 3 ? imageList.length : 3,
+                              controller: controller,
+                              allowedSwipeDirection:
+                                  const AllowedSwipeDirection.symmetric(
+                                      horizontal: true),
+                              scale: 0.9,
+                              threshold: 90,
+                              onSwipe: _onSwipe,
+                            )
+                          : Align(
+                              alignment: Alignment.center,
+                              child: Center(
+                                child: Animate(
+                                  effects: const [
+                                    TintEffect(),
+                                    FlipEffect(
+                                      delay: Duration(milliseconds: 400),
+                                    ),
+                                  ],
+                                  child: const Text(
+                                    'List is empty',
+                                    style: TextStyle(
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -100,8 +123,9 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
                           FloatingActionButton(
                             onPressed: () {
                               final userId = userIds[currentIndex].userId;
-                                context.read<FriendRequestsBloc>()
-                                .add(SwipeLeftEvent(userId));
+                              context
+                                  .read<FriendRequestsBloc>()
+                                  .add(SwipeLeftEvent(userId));
                             },
                             backgroundColor: Colors.green,
                             child: const Icon(
@@ -111,8 +135,9 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
                           ),
                           FloatingActionButton(
                             onPressed: () {
-                                context.read<FriendRequestsBloc>()
-                                .add(SwipeRightEvent('123'));
+                              context
+                                  .read<FriendRequestsBloc>()
+                                  .add(SwipeRightEvent('123'));
                             },
                             backgroundColor: Colors.red,
                             child: const Icon(
