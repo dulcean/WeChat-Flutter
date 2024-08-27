@@ -32,3 +32,5 @@ class FriendRequestsLoaded extends FriendRequestsState {
 }
 
 class FriendRequestsLoading extends FriendRequestsState {}
+
+class FriendRequestsContinue extends FriendRequestsState {}

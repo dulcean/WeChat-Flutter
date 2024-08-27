@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:WeChat/blocs/friends/friend_requests/friend_requests_bloc.dart';
 import 'package:WeChat/configs/app_theme.dart';
 import 'package:WeChat/models/friend.dart';
@@ -31,10 +29,6 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
       listener: (context, state) {
         if (state is ModalCloseState) {
           Navigator.of(context).pop();
-        } else if (state is CardSwipedState) {
-          log('Accepted');
-        } else if (state is CardSwipedRightState) {
-          log('Rejected');
         }
       },
       child: FractionallySizedBox(
@@ -82,6 +76,7 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
                                 currentIndex = index;
                                 return imageList[index];
                               },
+                              isLoop: false,
                               cardsCount: imageList.length,
                               numberOfCardsDisplayed:
                                   imageList.length < 3 ? imageList.length : 3,

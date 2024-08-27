@@ -20,4 +20,5 @@ abstract interface class UserRepository {
   Future<void> logOut();
   Future<WeUser?> getUserById(String userId);
   String? getCurrentId();
+  Future<bool> doesUserExist(String userId);
 }

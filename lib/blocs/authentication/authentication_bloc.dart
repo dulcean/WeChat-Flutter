@@ -21,9 +21,19 @@ class AuthenticationBloc
         );
       },
     );
-    on<AuthenticationUserChanged>((event, emit) {
+    on<AuthenticationUserChanged>((event, emit) async {
       if (event.user != WeUser.empty) {
-        emit(AuthenticationState.authenticated(event.user!));
+        final userId = event.user?.userId;
+        if (userId != null) {
+          final userExists = await userRepository.doesUserExist(userId);
+          if (userExists) {
+            emit(AuthenticationState.authenticated(event.user!));
+          } else {
+            emit(const AuthenticationState.unauthenticated());
+          }
+        } else {
+          emit(const AuthenticationState.unauthenticated());
+        }
       } else {
         emit(const AuthenticationState.unauthenticated());
       }

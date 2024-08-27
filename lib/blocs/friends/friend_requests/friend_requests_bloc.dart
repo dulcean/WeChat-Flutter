@@ -26,9 +26,16 @@ class FriendRequestsBloc
       cardSwiperController.swipe(CardSwiperDirection.left);
       try {
         await userFriendsRepository.acceptFriendRequest(event.userId);
-        emit(
-          CardSwipedState(event.userId),
-        );
+
+        final currentState = state;
+        if (currentState is FriendRequestsLoaded) {
+          final updatedList =
+              List<Friend>.from(currentState.pendingRequestUserIds)
+                ..removeWhere((element) => element.userId == event.userId);
+          emit(
+            FriendRequestsLoaded(updatedList),
+          );
+        }
       } catch (e) {
         log(e.toString());
       }
@@ -46,16 +53,16 @@ class FriendRequestsBloc
 
   Future<void> _onLoadFriendRequests(
       LoadFriendRequestsEvent event, Emitter<FriendRequestsState> emit) async {
-    emit(FriendRequestsLoading());
     try {
       final currentUserId = userRepository.getCurrentId();
       final userIds = await userFriendsRepository
           .getPendingFriendRequestUserIds(currentUserId!);
+      log('User IDs: $currentUserId');
+      log('User IDs: $userIds');
       final List<Friend> results = [];
       for (var userId in userIds) {
         final user = await userRepository.getUserById(userId);
         final userProfile = await userProfileRepository.getUserProfile(userId);
-
         results.add(Friend(
             userId: user!.userId,
             name: user.name,

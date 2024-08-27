@@ -32,8 +32,8 @@ class _RegisterPageState extends State<RegisterPage> {
         if (state is RegisterSuccess) {
           setState(() {
             registerRequired = false;
+            GoRouter.of(context).go('/auth');
           });
-          GoRouter.of(context).go('/auth');
         } else if (state is RegisterProcess) {
           setState(() {
             registerRequired = true;

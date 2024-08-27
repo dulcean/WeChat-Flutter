@@ -25,7 +25,6 @@ class AuthenticationLogic extends StatelessWidget {
               final userProfileRepository = RepositoryProvider.of<UserProfileRepository>(context);
               final isComplete =
                   await userProfileRepository.isProfileComplete(userId);
-
               if (isComplete) {
                 log('Navigating to HomePage');
                 context.go(RouterConstants.homePath);

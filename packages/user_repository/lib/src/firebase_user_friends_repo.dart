@@ -19,32 +19,50 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   Future<void> acceptFriendRequest(String friendId) async {
     try {
       final userId = userRepo.getCurrentId();
-      final friendsRequestDoc =
-          await _friendRequests.doc('${userId}_$friendId').get();
+      if (userId == null) {
+        throw Exception('User ID cannot be null');
+      }
 
-      if (friendsRequestDoc.exists) {
-        final userFriendsDoc = await _friendsCollection.doc(userId).get();
-        if (userFriendsDoc.exists) {
-          await _friendsCollection.doc(userId).update({
-            'friends': FieldValue.arrayUnion([friendId])
+      final userRequestsDoc = await _friendRequests.doc(userId).get();
+
+      if (userRequestsDoc.exists) {
+        final receivedRequests = List<String>.from(
+            userRequestsDoc.data()?['receivedRequests'] ?? []);
+        if (receivedRequests.contains(friendId)) {
+          final userFriendsDoc = await _friendsCollection.doc(userId).get();
+          if (userFriendsDoc.exists) {
+            await _friendsCollection.doc(userId).update({
+              'friends': FieldValue.arrayUnion([friendId])
+            });
+          } else {
+            await _friendsCollection.doc(userId).set({
+              'friends': [friendId]
+            });
+          }
+          final friendDoc = await _friendsCollection.doc(friendId).get();
+          if (friendDoc.exists) {
+            await _friendsCollection.doc(friendId).update({
+              'friends': FieldValue.arrayUnion([userId]),
+            });
+          } else {
+            await _friendsCollection.doc(friendId).set({
+              'friends': [userId]
+            });
+          }
+
+          await _friendRequests.doc(userId).update({
+            'receivedRequests': FieldValue.arrayRemove([friendId]),
           });
+          await _friendRequests.doc(friendId).update({
+            'sentRequests': FieldValue.arrayRemove([userId]),
+          });
+
+          log('Friend request accepted successfully.');
         } else {
-          await _friendsCollection.doc(userId).set({
-            'friends': [friendId]
-          });
+          log('No friend request found from this user.');
         }
-        final friendDoc = await _friendsCollection.doc(friendId).get();
-        if (friendDoc.exists) {
-          await _friendsCollection.doc(friendId).update({
-            'friends': FieldValue.arrayUnion([userId]),
-          });
-        } else {
-          await _friendsCollection.doc(friendId).set({
-            'friends': [userId]
-          });
-        }
-        await _friendRequests.doc('${userId}_$friendId').delete();
-        await _friendRequests.doc('${friendId}_$userId').delete();
+      } else {
+        log('No friend requests found.');
       }
     } catch (e) {
       log(e.toString());
@@ -148,6 +166,9 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   Future<void> sendFriendRequest(String friendId) async {
     try {
       String? userId = userRepo.getCurrentId();
+      if (userId == null) {
+        throw Exception('User ID cannot be null');
+      }
       final friendsDoc = await _friendsCollection.doc(userId).get();
       if (friendsDoc.exists) {
         final friends = (friendsDoc.data() as Map<String, dynamic>)['friends']
@@ -157,22 +178,30 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
           return;
         }
       }
-      final existingRequest = await _friendRequests
-          .where('userId', isEqualTo: userId)
-          .where('friendId', isEqualTo: friendId)
-          .get();
-      if (existingRequest.docs.isNotEmpty) {
+      final friendRequestsDoc = await _friendRequests.doc(userId).get();
+      final data = friendRequestsDoc.data();
+      final friendRequests =
+          data != null && data['sentRequests'] is List<dynamic>
+              ? List<String>.from(data['sentRequests'] as List<dynamic>)
+              : [];
+
+      if (friendRequests.contains(friendId)) {
         log('Friend request already sent. Please check your friend requests.');
         return;
       }
-      final reciprocalRequest = await _friendRequests
-          .where('userId', isEqualTo: friendId)
-          .where('friendId', isEqualTo: userId)
-          .get();
-      if (reciprocalRequest.docs.isNotEmpty) {
+
+      final receivedRequestsDoc = await _friendRequests.doc(friendId).get();
+      final dataX = receivedRequestsDoc.data();
+      final receivedRequests =
+          (dataX != null && dataX['receivedRequests'] != null)
+              ? List<String>.from(dataX['receivedRequests'] as List<dynamic>)
+              : [];
+
+      if (receivedRequests.contains(userId)) {
         log('Friend request already received. Please check your friend requests.');
         return;
       }
+
       final rejectedRequest =
           await _friendshipReject.doc('${friendId}_$userId').get();
       if (rejectedRequest.exists &&
@@ -182,11 +211,16 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
         log('Cannot send friend request. Please try again later.');
         return;
       }
-      await _friendRequests.doc('${userId}_$friendId').set({
-        'userId': userId,
-        'friendId': friendId,
-        'sentAt': Timestamp.now(),
-      });
+
+      await _friendRequests.doc(userId).set({
+        'sentRequests': FieldValue.arrayUnion([friendId]),
+      }, SetOptions(merge: true));
+
+      await _friendRequests.doc(friendId).set({
+        'receivedRequests': FieldValue.arrayUnion([userId]),
+      }, SetOptions(merge: true));
+
+      log('Friend request sent successfully.');
     } catch (e) {
       log(e.toString());
       rethrow;
@@ -197,13 +231,18 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   Future<List<String>> getPendingFriendRequestUserIds(
       String currentUserId) async {
     try {
-      final querySnapshot = await _friendRequests.get();
+      final doc = await _friendRequests.doc(currentUserId).get();
 
-      return querySnapshot.docs.map((doc) {
-        return doc['friendId'] as String;
-      }).toList();
+      if (doc.exists) {
+        final receivedRequests =
+            List<String>.from(doc.data()?['receivedRequests'] ?? []);
+
+        return receivedRequests;
+      } else {
+        return [];
+      }
     } catch (e) {
-      throw Exception('Error fetching friend requests: $e');
+      throw Exception('Error fetching pending friend requests: $e');
     }
   }
 }

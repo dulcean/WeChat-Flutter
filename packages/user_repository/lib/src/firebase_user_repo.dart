@@ -66,8 +66,12 @@ class FirebaseUserRepository implements UserRepository {
         yield WeUser.empty;
       } else {
         final userDocument = await userCollection.doc(firebaseUser.uid).get();
-        final userEntity = WeUserEntity.fromDocument(userDocument.data()!);
-        yield WeUser.fromEntity(userEntity);
+        if (userDocument.exists && userDocument.data() != null) {
+          final userEntity = WeUserEntity.fromDocument(userDocument.data()!);
+          yield WeUser.fromEntity(userEntity);
+        } else {
+          yield WeUser.empty;
+        }
       }
     });
   }
@@ -91,5 +95,16 @@ class FirebaseUserRepository implements UserRepository {
   String? getCurrentId() {
     User? user = FirebaseAuth.instance.currentUser;
     return user?.uid;
+  }
+
+  @override
+  Future<bool> doesUserExist(String userId) async {
+    try {
+      final userDoc = await userCollection.doc(userId).get();
+      return userDoc.exists;
+    } catch (e) {
+      log('Error checking user existence: $e');
+      return false;
+    }
   }
 }

@@ -14,179 +14,182 @@ import 'package:user_repository/user_repository.dart';
 import '../../components/friend_page/friend_tile.dart';
 import 'requests_page.dart';
 
-class FriendsPage extends StatefulWidget {
+class FriendsPage extends StatelessWidget {
   const FriendsPage({super.key});
 
   @override
-  State<FriendsPage> createState() => _FriendsPageState();
-}
-
-class _FriendsPageState extends State<FriendsPage> {
-  final searchController = TextEditingController();
-  final cardSwiperController = CardSwiperController();
-  final List<Map<String, dynamic>> data = [
-    {
-      'title': '1111',
-      'backgroundColor': AppTheme.lightTheme.cardColor,
-    },
-    {
-      'title': '1111',
-      'backgroundColor': AppTheme.lightTheme.cardColor,
-    },
-    {
-      'title': '1111',
-      'backgroundColor': AppTheme.lightTheme.cardColor,
-    },
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
-      body: Column(
-        children: [
-          Container(
-            height: 135,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: AppTheme.lightTheme.primaryColor,
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(30),
-              ),
-            ),
-            child: Column(
-              children: [
-                const SizedBox(height: 35),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: SearchArea(
-                    controller: searchController,
-                    hintText: 'Type W-Tag of user or name...',
-                    onTap: () {},
-                  ),
-                ),
-                const SizedBox(
-                  height: 18,
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Friends',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) {
-                              final cardSwiperController =
-                                  CardSwiperController();
+    final cardSwiperController = CardSwiperController();
 
-                              return BlocProvider(
-                                create: (context) => FriendRequestsBloc(
-                                    cardSwiperController: cardSwiperController,
-                                    userFriendsRepository: RepositoryProvider
-                                        .of<UserFriendsRepository>(context),
-                                    userRepository:
-                                        RepositoryProvider.of<UserRepository>(
-                                            context),
-                                    userProfileRepository: RepositoryProvider
-                                        .of<UserProfileRepository>(context)),
-                                child: BottomModalScreen(),
-                              );
-                            },
-                          );
-                        },
-                        child: const Text(
-                          'Requests',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<FriendRequestsBloc>(
+          create: (context) => FriendRequestsBloc(
+            cardSwiperController: cardSwiperController,
+            userFriendsRepository:
+                RepositoryProvider.of<UserFriendsRepository>(context),
+            userRepository: RepositoryProvider.of<UserRepository>(context),
+            userProfileRepository:
+                RepositoryProvider.of<UserProfileRepository>(context),
+          )..add(LoadFriendRequestsEvent()),
+        ),
+      ],
+      child: Scaffold(
+        backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
+        body: Column(
+          children: [
+            Container(
+              height: 135,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: AppTheme.lightTheme.primaryColor,
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(30),
+                ),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 35),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: SearchArea(
+                      controller: TextEditingController(),
+                      hintText: 'Type W-Tag of user or name...',
+                      onTap: () {},
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Friends',
+                          textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                             color: Colors.white,
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      // InkWell(
-                      //   onTap: () {},
-                      //   child: const Icon(
-                      //     Icons.more_vert,
-                      //     color: Colors.white,
-                      //     size: 20,
-                      //   ),
-                      // ),
-                      DropdownButtonHideUnderline(
-                        child: DropdownButton2(
-                          customButton: const Icon(
-                            Icons.more_vert,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          items: [
-                            DropdownMenuItem<MenuItem>(
-                              value: MenuItems.addFriend,
-                              child: MenuItems.buildItem(MenuItems.addFriend),
-                            ),
-                            // const DropdownMenuItem<Divider>(
-                            //     enabled: false, child: Divider()),
-                            DropdownMenuItem<MenuItem>(
-                              value: MenuItems.removeFriend,
-                              child:
-                                  MenuItems.buildItem(MenuItems.removeFriend),
-                            ),
-                          ],
-                          onChanged: (val) {
-                            onChanged(context, val!);
+                        const SizedBox(width: 20),
+                        BlocBuilder<FriendRequestsBloc, FriendRequestsState>(
+                          builder: (contextBlock, state) {
+                            return GestureDetector(
+                              onTap: () {
+                                final friendRequestsBloc =
+                                    BlocProvider.of<FriendRequestsBloc>(
+                                        contextBlock);
+                                showModalBottomSheet(
+                                  context: contextBlock,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (contextBlock) {
+                                    return BlocProvider.value(
+                                      value: friendRequestsBloc,
+                                      child: const BottomModalScreen(),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Row(
+                                children: [
+                                  const Text(
+                                    'Requests',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18,
+                                      color: Color.fromARGB(98, 255, 255, 255),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  BlocBuilder<FriendRequestsBloc,
+                                      FriendRequestsState>(
+                                    builder: (context, state) {
+                                      if (state is FriendRequestsLoaded) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Text(
+                                            state.pendingRequestUserIds.length
+                                                .toString(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return const SizedBox();
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
                           },
-                          dropdownStyleData: DropdownStyleData(
-                            width: 160,
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
+                        ),
+                        const Spacer(),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton2(
+                            customButton: const Icon(
+                              Icons.more_vert,
                               color: Colors.white,
+                              size: 20,
                             ),
-                            offset: const Offset(0, 8),
+                            items: [
+                              DropdownMenuItem<MenuItem>(
+                                value: MenuItems.addFriend,
+                                child: MenuItems.buildItem(MenuItems.addFriend),
+                              ),
+                              DropdownMenuItem<MenuItem>(
+                                value: MenuItems.removeFriend,
+                                child:
+                                    MenuItems.buildItem(MenuItems.removeFriend),
+                              ),
+                            ],
+                            onChanged: (val) {
+                              if (val != null) onChanged(context, val);
+                            },
+                            dropdownStyleData: DropdownStyleData(
+                              width: 160,
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                              ),
+                              offset: const Offset(0, 8),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          Expanded(
-            child: AnimationList(
-              reBounceDepth: 10,
-              duration: 100,
-              children: data.map((item) {
-                return FriendTile(
+            const SizedBox(height: 15),
+            Expanded(
+              child: AnimationList(
+                reBounceDepth: 10,
+                duration: 100,
+                children: [
+                  FriendTile(
                     title: 'GOIDA ZOV',
                     subtitle: 'LAVRIK_10000',
                     avatarUrl: Assets.images.icons.asset.path,
-                    backgroundColor: item['backgroundColor']);
-              }).toList(),
+                    backgroundColor: AppTheme.lightTheme.cardColor,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -221,9 +224,7 @@ abstract class MenuItems {
     return Row(
       children: [
         Icon(item.icon, color: AppTheme.lightTheme.primaryColor, size: 22),
-        const SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(
             item.text,
