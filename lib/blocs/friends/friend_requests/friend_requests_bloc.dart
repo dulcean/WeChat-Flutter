@@ -40,8 +40,22 @@ class FriendRequestsBloc
         log(e.toString());
       }
     });
-    on<SwipeRightEvent>((event, emit) {
+    on<SwipeRightEvent>((event, emit) async {
       cardSwiperController.swipe(CardSwiperDirection.right);
+      try {
+        await userFriendsRepository.rejectFriendRequest(event.userId);
+        final currentState = state;
+        if (currentState is FriendRequestsLoaded) {
+          final updatedList =
+              List<Friend>.from(currentState.pendingRequestUserIds)
+                ..removeWhere((element) => element.userId == event.userId);
+          emit(
+            FriendRequestsLoaded(updatedList),
+          );
+        }
+      } catch (e) {
+        log(e.toString());
+      }
     });
     on<CloseModalEvent>((event, emit) {
       emit(ModalCloseState());

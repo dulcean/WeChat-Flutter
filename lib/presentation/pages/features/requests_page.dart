@@ -130,9 +130,10 @@ class _BottomModalScreenState extends State<BottomModalScreen> {
                           ),
                           FloatingActionButton(
                             onPressed: () {
+                              final userId = userIds[currentIndex].userId;
                               context
                                   .read<FriendRequestsBloc>()
-                                  .add(SwipeRightEvent('123'));
+                                  .add(SwipeRightEvent(userId));
                             },
                             backgroundColor: Colors.red,
                             child: const Icon(

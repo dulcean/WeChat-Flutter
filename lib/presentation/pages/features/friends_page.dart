@@ -2,6 +2,7 @@ import 'package:WeChat/blocs/friends/friend_requests/friend_requests_bloc.dart';
 import 'package:WeChat/configs/app_theme.dart';
 import 'package:WeChat/configs/router_constants.dart';
 import 'package:WeChat/gen/assets.gen.dart';
+import 'package:WeChat/presentation/components/notification/notifications_badge.dart';
 import 'package:WeChat/presentation/components/text_editing/search_field.dart';
 import 'package:animation_list/animation_list.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -108,22 +109,9 @@ class FriendsPage extends StatelessWidget {
                                       FriendRequestsState>(
                                     builder: (context, state) {
                                       if (state is FriendRequestsLoaded) {
-                                        return Container(
-                                          padding: const EdgeInsets.all(6),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.red,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Text(
-                                            state.pendingRequestUserIds.length
-                                                .toString(),
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        );
+                                        return NotificationsBadge(
+                                            count: state
+                                                .pendingRequestUserIds.length);
                                       } else {
                                         return const SizedBox();
                                       }

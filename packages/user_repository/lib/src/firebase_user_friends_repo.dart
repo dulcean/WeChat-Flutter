@@ -94,21 +94,25 @@ class FirebaseUserFriendsRepository implements UserFriendsRepository {
   Future<void> rejectFriendRequest(String friendId) async {
     try {
       final userId = userRepo.getCurrentId();
-      final friendRequestDoc =
-          await _friendRequests.doc('${userId}_$friendId').get();
-      if (friendRequestDoc.exists) {
-        await _friendshipReject.doc('${userId}_$friendId').set({
-          'rejectedAt': Timestamp.now(),
-          'expiresAt': Timestamp.fromDate(
-            DateTime.now().add(
-              const Duration(
-                hours: 48,
-              ),
-            ),
-          ),
-        });
-        await _friendRequests.doc('${userId}_$friendId').delete();
+      if (userId == null) {
+        throw Exception('User ID cannot be null');
       }
+      final requestDocId = '${userId}_$friendId';
+      await _friendshipReject.doc(requestDocId).set({
+        'rejectedAt': Timestamp.now(),
+        'expiresAt': Timestamp.fromDate(
+          DateTime.now().add(const Duration(hours: 48)),
+        ),
+      });
+      await _friendRequests.doc(requestDocId).delete();
+      await _friendRequests.doc(friendId).update({
+        'sentRequests': FieldValue.arrayRemove([userId]),
+      });
+      await _friendRequests.doc(userId).update({
+        'receivedRequests': FieldValue.arrayRemove([friendId]),
+      });
+
+      log('Friend request rejected and removed successfully.');
     } catch (e) {
       log(e.toString());
       rethrow;
