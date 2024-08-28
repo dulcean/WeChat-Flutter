@@ -10,10 +10,6 @@ import 'simple_bloc_observer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final AuthenticationRepository authRepository =
-  //     AuthenticationRepository();
-  // final UserDataRepository dataRepository = UserDataRepository();
-  // final StorageRepository storeRepository = StorageRepository();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
