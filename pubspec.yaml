@@ -37,13 +37,16 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  dart_rules:
+    git:
+      url: https://github.com/fastogt/dart_rules.git
+      ref: main
   flutter_lints: ^2.0.0
   mockito: ^5.0.17
   build_runner: ^2.1.10
   json_serializable: ^6.6.1
   flutter_gen_runner:
   flutter_svg:
-
 
 flutter:
   uses-material-design: true
