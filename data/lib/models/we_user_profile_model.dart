@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:domain/domain.dart';
 import 'package:equatable/equatable.dart';
 
 class WeUserProfileModel extends Equatable {
@@ -50,8 +51,18 @@ class WeUserProfileModel extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory WeUserProfileModel.fromJson(String source) => WeUserProfileModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory WeUserProfileModel.fromJson(String source) =>
+      WeUserProfileModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   bool get stringify => true;
+
+  WeUserProfile toEntity() {
+    return WeUserProfile(
+      userId: this.userId,
+      photoUrl: this.photoUrl,
+      weTag: this.weTag,
+      description: this.description,
+    );
+  }
 }
