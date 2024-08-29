@@ -1,0 +1,3 @@
+class GoRouterConfig {
+  final GoRouter
+}
