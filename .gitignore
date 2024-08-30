@@ -45,3 +45,5 @@ app.*.map.json
 
 *.lock
 /firebase.json
+debug.log 
+debug.log 
