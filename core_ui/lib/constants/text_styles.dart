@@ -14,6 +14,13 @@ final class AppTextStyles {
     fontWeight: FontWeight.w700,
   );
 
+  static TextStyle button24 = TextStyle(
+    fontFamily: GoogleFonts.inter().fontFamily,
+    fontSize: FontSize.s24,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
+  );
+
   static TextStyle medium16 = TextStyle(
     fontFamily: GoogleFonts.inter().fontFamily,
     fontSize: FontSize.s16,

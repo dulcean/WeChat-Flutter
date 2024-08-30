@@ -2,6 +2,7 @@ library core_ui;
 
 export 'package:flutter/material.dart';
 
+export 'components/app_button.dart';
 export 'constants/app_colors.dart';
 export 'constants/dimensions.dart';
 export 'constants/text_styles.dart';

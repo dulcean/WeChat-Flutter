@@ -1,27 +1,31 @@
-name: core_ui
-description: "CORE_UI"
+name: welcome
+description: "Welcome_screen"
 version: 0.0.1
 publish_to: none
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  google_fonts: ^6.2.1
+  navigation:
+    path: ../../../navigation
+  core_ui: 
+    path: ../../../core_ui
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^2.0.0
   build_runner: ^2.4.12
   flutter_gen: ^5.7.0
   flutter_gen_runner: ^5.7.0
-  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/splash/
+    - assets/images/
     - assets/lottie/
